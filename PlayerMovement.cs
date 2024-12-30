@@ -13,8 +13,12 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Camera Follow")]
     public Camera cam;
-    [Range(0f, 1f)] public float interpolation 0.1f;
+    [Range(0f, 1f)] public float interpolation = 0.1f;
     public Vector3 offSet = new Vector3(0f, 2f, -10f);
+
+    [Header("Animation")]
+    public Animator anim;
+    public Transform head;
 
     private Rigidbody2D rb;
 
@@ -36,6 +40,32 @@ public class PlayerMovement : MonoBehaviour
     {
         float xDir = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(xDir * (moveForce * Time.deltaTime), rb.velocity.y);
+
+
+        //animation
+
+        if(xDir != 0)
+        {
+            head.localScale = new Vector3(xDir, 1f, 1f);
+        }
+
+        if(xDir > 0)
+        {
+            anim.SetBool("Walk", true);
+            anim.SetBool("WalkBack", false);
+        }
+
+        if(xDir < 0)
+        {
+            anim.SetBool("Walk", false);
+            anim.SetBool("WalkBack", true);
+        }
+
+        if(xDir == 0)
+        {
+            anim.SetBool("Walk", false);
+            anim.SetBool("WalkBack", false);
+        }
     }
 
     private void Jump()
